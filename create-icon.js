@@ -1,19 +1,22 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
+const { camelCase, upperFirst } = require('lodash');
 
 console.log('Ready to generate RN icon font!');
 
 const FONT_ICON_NAME = 'omio-font-icon';
-const FOLDER_TARGET = './assets/safe';
-const GLYPH_MAP_DIR = `${FOLDER_TARGET}/${FONT_ICON_NAME}.json`;
+const FOLDER_TARGET = './assets/icons';
+const OUTPUT_FOLDER = './assets/font';
+const GLYPH_MAP_DIR = `${OUTPUT_FOLDER}/${FONT_ICON_NAME}.json`;
+const ICON_COMPONENT_DIR = './src/Icon/index.native.js';
 
 // generating ttf and glyph map with all the svg
 execSync(
-  `icon-font-generator ${FOLDER_TARGET}/*.svg -o ${FOLDER_TARGET} -n ${FONT_ICON_NAME} -c false --html false --types ttf`,
+  `icon-font-generator ${FOLDER_TARGET}/*.svg -o ${OUTPUT_FOLDER} -n ${FONT_ICON_NAME} -c false --html false --types ttf`,
 );
 
 // creating index.native.js file with all the exports of icons
-const indexFile = fs.openSync('./src/Icon/index.aux.native.js', 'w');
+const indexFile = fs.openSync(ICON_COMPONENT_DIR, 'w');
 fs.writeSync(indexFile, `import React from 'react';\nimport Icon from './Icon';\n\n`);
 
 // reading generated glyphMap
@@ -22,7 +25,12 @@ const glyphMap = JSON.parse(fs.readFileSync(GLYPH_MAP_DIR));
 // for each icon
 const glyphMapDecimal = Object.keys(glyphMap).reduce((acc, curr) => {
   // create an entry inside index.native.js
-  fs.writeSync(indexFile, `export const ${curr} = props => <Icon {...props} name="${curr}" />;\n`);
+  const nameInCamelCase = camelCase(curr);
+  const nameInPascalCase = upperFirst(nameInCamelCase);
+  fs.writeSync(
+    indexFile,
+    `export const ${nameInPascalCase} = props => <Icon {...props} name="${curr}" />;\n`,
+  );
 
   // need to change hexa value to decimal because RN does not handle it
   const decimalValue = parseInt(glyphMap[curr].substr(1), 16);

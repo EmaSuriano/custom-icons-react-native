@@ -4,12 +4,12 @@ const fs = require('fs');
 console.log('Ready to generate RN icon font!');
 
 const FONT_ICON_NAME = 'omio-font-icon';
-const FOLDER_TARGET = './assets';
+const FOLDER_TARGET = './assets/safe';
 const GLYPH_MAP_DIR = `${FOLDER_TARGET}/${FONT_ICON_NAME}.json`;
 
 // generating ttf and glyph map with all the svg
 execSync(
-  `icon-font-generator ${FOLDER_TARGET}/*.svg -o omio-assets -n ${FONT_ICON_NAME} -c false --html false --types ttf`,
+  `icon-font-generator ${FOLDER_TARGET}/*.svg -o ${FOLDER_TARGET} -n ${FONT_ICON_NAME} -c false --html false --types ttf`,
 );
 
 // creating index.native.js file with all the exports of icons

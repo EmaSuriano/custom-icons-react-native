@@ -1,11 +1,7 @@
 import React from 'react';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import { Font } from 'expo';
-// import { createIconSet } from 'react-native-vector-icons';
-// import glyphMapFA from './assets-FA/FontAwesome.json';
-import * as Icons from './src/Icon/index.native';
 import { View } from 'react-native';
-// const FontAwesomeIcon = createIconSet(glyphMapFA, 'FontAwesome', 'FontAwesome.ttf');
+import * as Icons from './src/Icon/index.native';
 
 export default class Ema extends React.Component {
   state = {
@@ -31,13 +27,11 @@ export default class Ema extends React.Component {
           const Icon = Icons[icon];
           return (
             <View style={{ borderColor: 'grey', borderWidth: 0.5, padding: 5 }} key={icon}>
-              <Icon size={20} color="navy" />
+              <Icon size={40} color="navy" />
             </View>
           );
         })}
       </View>
     );
-    return <Icons.Chevron size={80} color="blue" />;
-    // return <FontAwesomeIcon name="plane" size={30} color="#900" />;
   }
 }

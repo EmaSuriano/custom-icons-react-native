@@ -5,7 +5,7 @@ const { camelCase, upperFirst } = require('lodash');
 console.log('Ready to generate RN icon font!');
 
 const FONT_ICON_NAME = 'custom-font-icon';
-const ICONS_FOLDER = './assets/icons/real';
+const ICONS_FOLDER = './assets/icons';
 const OUTPUT_FOLDER = './assets/font';
 const GLYPH_MAP_DIR = `${OUTPUT_FOLDER}/${FONT_ICON_NAME}.json`;
 const ICON_COMPONENT_DIR = './src/Icon/index.native.js';

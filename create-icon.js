@@ -4,7 +4,7 @@ const { camelCase, upperFirst } = require('lodash');
 
 console.log('Ready to generate RN icon font!');
 
-const FONT_ICON_NAME = 'omio-font-icon';
+const FONT_ICON_NAME = 'custom-font-icon';
 const ICONS_FOLDER = './assets/icons/real';
 const OUTPUT_FOLDER = './assets/font';
 const GLYPH_MAP_DIR = `${OUTPUT_FOLDER}/${FONT_ICON_NAME}.json`;

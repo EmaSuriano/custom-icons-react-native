@@ -11,7 +11,7 @@ export default class Ema extends React.Component {
   async componentDidMount() {
     await Font.loadAsync({
       FontAwesome: require('./assets-FA/FontAwesome.ttf'),
-      'omio-font-icon': require('./assets/font/omio-font-icon.ttf'),
+      'custom-font-icon': require('./assets/font/custom-font-icon.ttf'),
     });
 
     this.setState({ fontLoaded: true });

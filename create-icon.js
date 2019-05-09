@@ -5,14 +5,14 @@ const { camelCase, upperFirst } = require('lodash');
 console.log('Ready to generate RN icon font!');
 
 const FONT_ICON_NAME = 'omio-font-icon';
-const FOLDER_TARGET = './assets/icons';
+const ICONS_FOLDER = './assets/icons/safe';
 const OUTPUT_FOLDER = './assets/font';
 const GLYPH_MAP_DIR = `${OUTPUT_FOLDER}/${FONT_ICON_NAME}.json`;
 const ICON_COMPONENT_DIR = './src/Icon/index.native.js';
 
 // generating ttf and glyph map with all the svg
 execSync(
-  `icon-font-generator ${FOLDER_TARGET}/*.svg -o ${OUTPUT_FOLDER} -n ${FONT_ICON_NAME} -c false --html false --types ttf`,
+  `icon-font-generator ${ICONS_FOLDER}/*.svg -o ${OUTPUT_FOLDER} -n ${FONT_ICON_NAME} -c false --html false --types ttf`,
 );
 
 // creating index.native.js file with all the exports of icons

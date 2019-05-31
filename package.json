@@ -17,5 +17,5 @@
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
   },
-  "license": "ISC"
+  "license": "MIT"
 }

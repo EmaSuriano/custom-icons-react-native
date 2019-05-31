@@ -1,46 +1,40 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
-const { camelCase, upperFirst } = require('lodash');
 
-console.log('Ready to generate RN icon font!');
+const toPascalCase = string =>
+  string
+    .match(/[a-z]+/gi)
+    .map(word => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
+    .join('');
 
-const FONT_ICON_NAME = 'custom-font-icon';
-const ICONS_FOLDER = './assets/icons';
-const OUTPUT_FOLDER = './assets/font';
-const GLYPH_MAP_DIR = `${OUTPUT_FOLDER}/${FONT_ICON_NAME}.json`;
-const ICON_COMPONENT_DIR = './src/Icon/index.native.js';
+console.log('Ready to generate RN icon font ⏰');
 
-// generating ttf and glyph map with all the svg
+// STEP 1: Generate .ttf and glyph map with all the icons
 execSync(
-  `icon-font-generator ${ICONS_FOLDER}/*.svg -o ${OUTPUT_FOLDER} -n ${FONT_ICON_NAME} -c false --html false --types ttf`,
+  `icon-font-generator ./assets/icons/*.svg -o ./assets/font -n custom-font-icon -c false --html false --types ttf`,
 );
 
-// creating index.native.js file with all the exports of icons
-const indexFile = fs.openSync(ICON_COMPONENT_DIR, 'w');
-fs.writeSync(indexFile, `import React from 'react';\nimport Icon from './Icon';\n\n`);
-
-// reading generated glyphMap
-const glyphMap = JSON.parse(fs.readFileSync(GLYPH_MAP_DIR));
-
-// for each icon
-const glyphMapDecimal = Object.keys(glyphMap).reduce((acc, curr) => {
-  // create an entry inside index.native.js
-  const nameInCamelCase = camelCase(curr);
-  const nameInPascalCase = upperFirst(nameInCamelCase);
-  fs.writeSync(
-    indexFile,
-    `export const ${nameInPascalCase} = props => <Icon {...props} name="${curr}" />;\n`,
-  );
-
-  // need to change hexa value to decimal because RN does not handle it
-  const decimalValue = parseInt(glyphMap[curr].substr(1), 16);
-  return {
+// STEP 2: Modify glyph map, change hexa values to decimal
+const glyphMap = JSON.parse(fs.readFileSync('./assets/font/custom-font-icon.json'));
+const glyphMapDecimal = Object.keys(glyphMap).reduce(
+  (acc, curr) => ({
     ...acc,
-    [curr]: decimalValue,
-  };
-}, {});
+    [curr]: parseInt(glyphMap[curr].substr(1), 16),
+  }),
+  {},
+);
 
-// replace original glyph map with the new one
-fs.writeFileSync(GLYPH_MAP_DIR, JSON.stringify(glyphMapDecimal));
+fs.writeFileSync('./assets/font/custom-font-icon.json', JSON.stringify(glyphMapDecimal)); // write file
 
-console.log('Font and glyph map created.');
+// STEP 3: Create index.js file with the respective exports
+const indexLines = ["import React from 'react';", "import Icon from './Icon';", ''];
+indexLines.push(
+  ...Object.keys(glyphMap).map(
+    iconKey =>
+      `export const ${toPascalCase(iconKey)} = props => <Icon {...props} name="${iconKey}" />;`,
+  ),
+);
+
+fs.writeFileSync('./src/Icon/index.js', indexLines.join('\n')); // write file
+
+console.log('Font and glyph map created 🎉');

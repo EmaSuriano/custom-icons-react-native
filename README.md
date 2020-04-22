@@ -1,3 +1,5 @@
+**⚠️ This project has been deprecated because I created another repository with better documentation and practices. [Link to the new repository](https://github.com/EmaSuriano/maintainable-icon-system-react) ⚠️**
+
 # custom-icons-react-native
 
 This is an example of how to load custom icons into react native without the need to use 3rd party services as Fontello or Icomoon. The icons I choose for the example can be found inside [FlatIcon](https://www.flaticon.com/packs/landmarks-and-monuments-18).
